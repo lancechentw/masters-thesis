@@ -96,3 +96,9 @@ sympy-plots-for-*.tex/
 
 # xindy
 *.xdy
+
+
+# nodejs
+node_modules/
+logs
+*.log

@@ -1,0 +1,21 @@
+{
+  "name": "masters-thesis",
+  "version": "0.0.1",
+  "author": "Lance Chen <cyen0312@gmail.com>",
+  "description": "CRAXDroid",
+  "scripts": {
+    "build": "gulp build",
+    "start": "gulp watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Lance0312/masters-thesis"
+  },
+  "keywords": [
+    "CRAXDroid"
+  ],
+  "devDependencies": {
+    "gulp": "~3.6.0",
+    "gulp-util": "~2.2.14"
+  }
+}
