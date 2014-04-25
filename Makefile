@@ -1,14 +1,15 @@
 THESIS=		thesis
 XELATEX=	xelatex
+TEX_OPTIONS=	-shell-escape
 BIBER=		biber
 
 all: $(THESIS).pdf
 
 $(THESIS).pdf:
-	$(XELATEX) $(THESIS)
+	$(XELATEX) $(TEX_OPTIONS) $(THESIS)
 	$(BIBER)   $(THESIS)
-	$(XELATEX) $(THESIS)
-	$(XELATEX) $(THESIS)
+	$(XELATEX) $(TEX_OPTIONS) $(THESIS)
+	$(XELATEX) $(TEX_OPTIONS) $(THESIS)
 
 clean:
 	rm -f *.aux *.dvi *.bbl *.bcf *.blg *.log *.out *.toc *.lof *.lol *.lot *.snm *.nav *.pdf
