@@ -13,26 +13,80 @@ order to improve performance or to conceal business logic.
 
 To use JNI, app developers first implement the desired program logic in
 C/C++/Assembly, and compile the source code into a native shared library. Apps
-then load the shared library through System.loadLibrary() method in order to
-use it. While JNI extends the power of Android apps, it also increases the
-chance that the apps suffer from known vulnerabilities, such as stack overflow,
-heap overflow, etc.
+then load the shared library through \textbf{System.loadLibrary()} method in
+order to use it. While JNI extends the power of Android apps, it also increases
+the chance that the apps suffer from known vulnerabilities, such as stack
+overflow, heap overflow, etc.
 
 To exploit a program basically means to hijack the control flow of a process
 via known vulnerabilities. And the hijacking task usually involves PC (program
 counter), or referred to IP (instruction pointer) on some architectures,
-forging. The PC register stores a memory address, which pointed to a
-instruction to be run by the CPU. If the PC register could somehow be affected
-by some user controllable input, a hacker might be able to make the CPU execute
-customized, and usually malicious, instructions, for example, instructions to
-spawn a shell.
+forging. The PC register stores a memory address, which contains a instruction
+to be run by the CPU. If the PC register could somehow be affected by some user
+controllable input, a hacker might be able to make the CPU execute customized,
+and usually malicious, instructions. For example, instructions to spawn a
+shell or instructions to establish connections to remote hosts.
 
 \emph{CRAX} uses \emph{S$^{2}$E}\autocite{chipounov2011s2e}, a system analysis
-platform based on symbolic execution, to find out how cirtical factors, such as
-PC, are related to user controllable input.
+platform based on \emph{QEMU} machine emulator and \emph{KLEE} symbolic
+execution engine, to find out how critical factors, such as PC, are related to
+user controllable input. As shown in
+Figure~\ref{fig:blind-program-counter-contamination}, let's say we have a
+string with forty `A's as the input string, in which the 1st, 11th, 21st and
+31st bytes are concatenated as a four-byte string during the process execution
+and results in PC overwritten. Normally, a hacker will then modify the input
+string into a slightly different one, such as ``AAAABBBBCCCC...'', and rerun
+the program again to see if anything changed to the PC value. The above action
+will be proceeded over and over again until the hacker can identify the exact
+four bytes that decide the PC value.
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth]{blind-program-counter-contamination}
+  \caption{Vague relationship between input string and program counter}
+  \label{fig:blind-program-counter-contamination}
+\end{figure}
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth]{program-counter-contamination}
+  \caption{Clear relationship between input string and program counter}
+  \label{fig:program-counter-contamination}
+\end{figure}
+
+\emph{CRAX} makes this process easy relying on symbolic execution. A hacker
+first symbolizes the input string, the input string thereby becomes expressions
+instead of constant values. For example, reading from the first byte of the
+string results in the expression ``(ReadLSB w8 0x0 v0\_symdata\_0)'' instead of
+the original value `A'. The expression means ``Reads 8 bits starting from
+offset 0 of symbolic value v0\_symdata\_0''. When PC is found tainted, with the
+example we just mentioned, instead of ``AAAA'', an expression like
+Listing~\ref{lst:concat-expression} will be retrieved. The result clearly shows
+that PC is overwritten by a string concatenated by offset 0x0 (1st),
+0xa (11th), 0x14 (21st), and 0x1e (31st) of v0\_symdata\_0, as shown in
+Figure~\ref{fig:program-counter-contamination}.
+
+\begin{listing}[H]
+  \begin{minted}{text}
+  (Concat w32 (ReadLSB w8 0x1e v0_symdata_0)
+              (Concat w24 (ReadLSB w8 0x14 v0_symdata_0)
+                          (Concat w16 (ReadLSB w8 0xa v0_symdata_0)
+                                      (ReadLSB w8 0x0 v0_symdata_0))))
+  \end{minted}
+  \caption{Expression of concatenating 1st, 11th, 21st and 31st bytes}
+  \label{lst:concat-expression}
+\end{listing}
 
 \begin{figure}[!ht]
   \includegraphics[width=\textwidth]{android-exploit-scenario}
   \caption{An Exploit Scenario on Android}
   \label{fig:android-exploit-scenario}
 \end{figure}
+
+To further generate exploit for a vulnerable shared library of a Android app, a
+scenario is presented as Figure~\ref{fig:android-exploit-scenario} shown.
+Suppose a app uses a shared library, which reads from local files and then copy
+the content into local buffers using dangerous functions, for example,
+\textbf{strcpy} or \textbf{strncpy}. The first step is to feed a file that will
+trigger the vulnerability. \emph{CRAX} installs a sensor at the place where the
+PC register updates value. Once the sensor detects that the value contains
+symbolic expressions instead of constant value, the exploit generating process
+starts.
