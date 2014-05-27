@@ -1,6 +1,8 @@
 \chapter{Implementation}
 
-\section{Proof of Concept on Android x86}
+\section{Android x86}
+
+\subsection{Scenario 1 - propagate underneath Dalvik VM}
 
 Android x86 suffers from the same kind of vulnerabilities just like any other
 system that runs on the x86 architecture does, stack overflow, heap overflow,
@@ -34,10 +36,11 @@ returning stack frame, a pre-deployed sensor set by \emph{CRAXDroid} would
 check if the EIP is contaminated by the symbolic input and trigger the
 progress of exploit generating if the examination goes true.
 
-\section{ARM}
-\subsection{Linux ARM}
-\subsubsection{Validating BOF on Raspberry Pi}
+\subsection{Scenario 2 - propagate through Dalvik VM}
 
+\section{ARM}
+\subsection{Raspberry Pi}
+\subsection{Linux ARM}
 \subsection{Android ARM}
 
 % vim: sw=2 sts=2 et
