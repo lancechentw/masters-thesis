@@ -90,3 +90,64 @@ trigger the vulnerability. \emph{CRAX} installs a sensor at the place where the
 PC register updates value. Once the sensor detects that the value contains
 symbolic expressions instead of constant value, the exploit generating process
 starts.
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth]{android-exploit-scenario2}
+  \caption{Another Exploit Scenario on Android}
+  \label{fig:android-exploit-scenario2}
+\end{figure}
+
+The previous scenario takes place underneath DVM completely, which makes it
+almost no different from exploiting an ordinary linux application. To let
+\emph{CRAXDroid} better live up to its name, another scenario is designed. As
+shown in Figure~\ref{fig:android-exploit-scenario2}, this scenario is almost
+identical to the previous one, except the input file is read by the DVM instead
+of the shared library. Although a small change, it makes big different.
+
+Symbolic execution lives on symbol propagating and constraints collecting. When
+execution comes to a conditional branch, for example, \textbf{jz},
+\textbf{jnz}, \textbf{jge}, etc., and a operand is symbolized, the execution
+engine will collect the constraint, named ``path constraint''. The path
+constraints that would eventually lead to the ``success'' in
+Listing~\ref{lst:simple-branching} would be resolved to
+Listing~\ref{lst:simple-branching-constraints}. Given a solver the path
+constraint, it will generate solutions that satisfy the constraint, such as the
+string ``Y\textless A''.
+
+\begin{listing}[H]
+  \begin{minted}[linenos]{c}
+  if (data[0] != 'Z') {
+      if (data[1] != '>') {
+          if (data[2] != 'B') {
+              print('success');
+          }
+      }
+  }
+  \end{minted}
+  \caption{An Example of Simple Branching}
+  \label{lst:simple-branching}
+\end{listing}
+
+\begin{listing}[H]
+  \begin{minted}{text}
+  (And w8 (Eq false
+              (Eq (w8 0x42)
+                  (ReadLSB w8 0x2 v0_symdata_0)))
+          (And w8 (Eq false
+                      (Eq (w8 0x31)
+                          (ReadLSB w8 0x1 v0_symdata_0)))
+                  (Eq false
+                      (Eq (w8 0x5a)
+                          (ReadLSB w8 0x0 v0_symdata_0)))))
+  \end{minted}
+  \caption{The path constraint generated from Listing~\ref{lst:simple-branching}}
+  \label{lst:simple-branching-constraints}
+\end{listing}
+
+Back to the scenario, since we don't know whether symbol propagating would work
+properly inside DVM, the first scenario is designed as a quick proof of concept
+to prove that there are chances that vulnerabilities would hide under shared
+libraries and \emph{CRAXDroid} is capable of exploiting them. The second
+scenario intends to prove that symbols would be propagated through DVM and
+contaminate shared libraries without problems. Therefore, not only files, more
+sources would start to become dangerous.
