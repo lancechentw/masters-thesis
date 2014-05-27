@@ -6,10 +6,10 @@ Linux/Windows exploit automatically. \emph{CRAXDroid} leverages the power of
 system. To exploit Android, we start digging from the very outer skin---apps.
 
 Apps are mostly written in Java and compiled into bytecode. Apps are then run
-by DVM (Dalvik Virtual Machine), which translate bytecode into machine specific
-language. Since the translation takes time and bytecode is easily decompiled
-into human readable Java code, JNI (Java Native Interface) is introduced in
-order to improve performance or to conceal business logic.
+by Dalvik VM (Dalvik Virtual Machine), which translate bytecode into machine
+specific language. Since the translation takes time and bytecode is easily
+decompiled into human readable Java code, JNI (Java Native Interface) is
+introduced in order to improve performance or to conceal business logic.
 
 To use JNI, app developers first implement the desired program logic in
 C/C++/Assembly, and compile the source code into a native shared library. Apps
@@ -97,12 +97,12 @@ starts.
   \label{fig:android-exploit-scenario2}
 \end{figure}
 
-The previous scenario takes place underneath DVM completely, which makes it
-almost no different from exploiting an ordinary linux application. To let
+The previous scenario takes place underneath Dalvik VM completely, which makes
+it almost no different from exploiting an ordinary linux application. To let
 \emph{CRAXDroid} better live up to its name, another scenario is designed. As
 shown in Figure~\ref{fig:android-exploit-scenario2}, this scenario is almost
-identical to the previous one, except the input file is read by the DVM instead
-of the shared library. Although a small change, it makes big different.
+identical to the previous one, except the input file is read by the Dalvik VM
+instead of the shared library. Although a small change, it makes big different.
 
 Symbolic execution lives on symbol propagating and constraints collecting. When
 execution comes to a conditional branch, for example, \textbf{jz},
@@ -145,9 +145,9 @@ string ``Y\textless A''.
 \end{listing}
 
 Back to the scenario, since we don't know whether symbol propagating would work
-properly inside DVM, the first scenario is designed as a quick proof of concept
-to prove that there are chances that vulnerabilities would hide under shared
-libraries and \emph{CRAXDroid} is capable of exploiting them. The second
-scenario intends to prove that symbols would be propagated through DVM and
-contaminate shared libraries without problems. Therefore, not only files, more
-sources would start to become dangerous.
+properly inside Dalvik VM, the first scenario is designed as a quick proof of
+concept to prove that there are chances that vulnerabilities would hide under
+shared libraries and \emph{CRAXDroid} is capable of exploiting them. The second
+scenario intends to prove that symbols would be propagated through Dalvik VM
+and contaminate shared libraries without problems. Therefore, not only files,
+more sources would start to become dangerous.
