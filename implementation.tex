@@ -1,5 +1,11 @@
 \chapter{Implementation}
 
+Using \emph{QEMU} makes \emph{S$^{2}E$} capable of performing whole sysetm
+symbolic execution on all architectures supported by \emph{QEMU}. Since
+\emph{CRAX} has the knowledge of exploiting linux x86 applications,
+\href{http://www.android-x86.org/}{Android x86} is chosen to be the entrypoint
+to exploit Android.
+
 \section{Android x86}
 
 \subsection{Scenario 1 - propagate underneath Dalvik VM}
