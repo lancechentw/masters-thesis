@@ -8,6 +8,33 @@ to exploit Android.
 
 \section{Android x86}
 
+Another reason to choose Android x86 is that it provides direct \emph{QEMU}
+support. By building Android x86 with ``make iso\_img'', it returns an
+installation iso image that can be used to install Android on any storage
+media, just like any other regular linux distribution does.
+Figure~\ref{fig:android-x86-installation} shows the first step of the
+installation. Normally, it takes around five steps to finish installation. The
+highlighted option in Figure~\ref{fig:android-x86-installation} is a quick path
+that I built for one-step installation.
+
+\begin{figure}[!ht]
+  \includegraphics[width=0.7\textwidth]{android-x86-installation}
+  \caption{Android x86 Installation ISO Image}
+  \label{fig:android-x86-installation}
+\end{figure}
+
+There are two command line executables pre-embedded into to Android x86 source
+tree for app testing. The first one is \textbf{s2ecmd}, which is mainly used to
+toggle switch of single path concolic execution. The second one is
+\textbf{symfile}, see Listing~\ref{lst:symfile.c} on
+page~\pageref{lst:symfile.c}. \textbf{symfile} is used to mark a file content
+as symbolic source as a input of app testing. Our version of \textbf{symfile}
+is different from the one provided by \textbf{s2ecmd}, which required the
+target file to be stored in a ramdisk. Our \textbf{symfile} will first map the
+target file into a bunch of memory space by using \textbf{mmap}. Thus,
+accessing data from the file will be accessing data from the mapped memory
+space.
+
 \subsection{Scenario 1 - propagate underneath Dalvik VM}
 
 Android x86 suffers from the same kind of vulnerabilities just like any other
@@ -17,12 +44,6 @@ library becomes a potential threat. To prove that \emph{CRAXDroid} is able to
 generate exploit automatically on Android x86, a vulnerable app is constructed
 intentionally.
 
-\begin{figure}[!ht]
-  \includegraphics[width=\textwidth]{x86-stack-layout}
-  \caption{x86 stack layout}
-  \label{fig:x86-stack-layout}
-\end{figure}
-
 The vulnerable app contains a stack overflow vulnerability caused by improper
 use of the function \textbf{strcpy}. \textbf{strcpy} is known to cause
 stack overflow if boundary checking is not done properly. For example, copying
@@ -31,6 +52,12 @@ the stack by 5 bytes. Combining with the nature of x86 architecture, which
 store instruction pointers (EIP) on the stack as shown in
 Figure~\ref{fig:x86-stack-layout}, attackers would be able to forge the EIP
 value and intrude the running process.
+
+\begin{figure}[!ht]
+  \includegraphics[width=\textwidth]{x86-stack-layout}
+  \caption{x86 stack layout}
+  \label{fig:x86-stack-layout}
+\end{figure}
 
 \emph{CRAXDroid} first maps a local file into memory by using \textbf{mmap} and
 marks the part of the memory as symbolic to keep track of the flow of the file
