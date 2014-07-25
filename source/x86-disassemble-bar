@@ -1,0 +1,13 @@
+(gdb) disas bar
+Dump of assembler code for function bar:
+   0x080483fd <+0>:     push   %ebp
+   0x080483fe <+1>:     mov    %esp,%ebp
+   0x08048400 <+3>:     sub    $0x48,%esp
+   0x08048403 <+6>:     mov    0x8(%ebp),%eax
+   0x08048406 <+9>:     mov    %eax,0x4(%esp)
+   0x0804840a <+13>:    lea    -0x30(%ebp),%eax
+   0x0804840d <+16>:    mov    %eax,(%esp)
+   0x08048410 <+19>:    call   0x80482d0 <strcpy@plt>
+   0x08048415 <+24>:    leave   
+   0x08048416 <+25>:    ret    
+End of assembler dump.

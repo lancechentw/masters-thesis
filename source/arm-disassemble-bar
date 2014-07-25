@@ -1,0 +1,13 @@
+(gdb) disas bar
+Dump of assembler code for function bar:
+   0x0000842c <+0>:     push    {r11, lr}
+   0x00008430 <+4>:     add     r11, sp, #4
+   0x00008434 <+8>:     sub     sp, sp, #48     ; 0x30
+   0x00008438 <+12>:    str     r0, [r11, #-48] ; 0x30
+   0x0000843c <+16>:    sub     r3, r11, #44    ; 0x2c
+   0x00008440 <+20>:    mov     r0, r3
+   0x00008444 <+24>:    ldr     r1, [r11, #-48] ; 0x30
+   0x00008448 <+28>:    bl      0x82c8 <strcpy>
+   0x0000844c <+32>:    sub     sp, r11, #4
+   0x00008450 <+36>:    pop     {r11, pc}
+End of assembler dump.
