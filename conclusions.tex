@@ -1,8 +1,45 @@
 \chapter{Discussion and Conclusions}
 
-\section{Limitions (for now)}
-\section{Non eXecutable Stack}
+\emph{CRAXDroid} aims at exploiting vulnerabilities inside Android apps. To be
+specific, programming logic that works fine under normal condition, but fails
+when unexpected input are fed with. Android x86 is taken as the first Guinea
+pig to show that \emph{CRAXDroid} does its works. However, most devices running
+Android are built on ARM architecture, and exploiting software on ARM
+architecture is quite different from exploiting software on x86 architecture,
+since the two are designed differently. Raspberry Pi is taken to examine stack
+overflow vulnerabilities and to study ARM calling convention. Taking advantage
+from QEMU makes cross-platform testing easy. Two linux distributions that
+support ARM are taken to improve \emph{CRAXDroid}. One is Debian ARM, which is
+emulated by ARM926 (ARMv5) CPU, and the other one is Raspbian, which is
+emulated by ARM1176 (ARMv6) CPU. Three programs are tested against the two
+distributions, and two programs are successfully generated exploit on Raspbian,
+while only one is generated on Debian ARM.
 
-\section{Other Popular Vulnerabilities}
-\subsection{Heap Overflow}
-\subsection{Format String}
+While \emph{CRAXDroid} development is still in its early stage, there are
+several features to be implemented next
+
+\begin{itemize}
+
+\item{Emulating Android ARM with pure QEMU}
+
+Although AOSP Android provides a emulator based on QEMU to emulate Android, the
+emulator is highly customized, and might not fit for \emph{S$^{2}$E} to use. To
+make Android ARM runs on pure QEMU, a customized kernel is needed, and the
+installer from Android x86 could be brought in to help.
+
+\item{Real Exploit For ARM}
+
+Currently, we use the same exploit generate technique to generate exploit for
+both x86 and ARM architecture. However, the generated exploit would not work on
+ARM, since ARM is born with non-executable stack. More exploit techniques, such
+as ROP (Return Oriented Programming), need to be brought in to generate
+feasible exploit for both ARM and x86.
+
+\item{Testing on Various ARM architecures}
+
+There are many ARM architectures, from ARMv1 to ARMv8. It is uncleared if
+\emph{CRAXDroid} works on all of them. Modern smart phones are equipped with
+Cortex family CPUs, which are ARMv7 architectures. We should test ARMv7 as
+well.
+
+\end{itemize}
