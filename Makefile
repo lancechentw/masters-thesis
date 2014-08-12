@@ -5,7 +5,7 @@ BIBER=		biber
 
 all: svg $(THESIS).pdf
 
-$(THESIS).pdf:
+$(THESIS).pdf: *.tex *.bib
 	$(XELATEX) $(TEX_OPTIONS) $(THESIS)
 	$(BIBER)   $(THESIS)
 	$(XELATEX) $(TEX_OPTIONS) $(THESIS)
