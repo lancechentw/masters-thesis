@@ -1,1 +1,34 @@
 \chapter{Introduction}
+
+There are many solutions\autocite{enck2010taintdroid}\autocite{yan2012droidscope}\autocite{yang2013appintent}\autocite{zhou2013detecting} which try to protect your Android phone from
+being offended by apps with bad intentions, such as leaking privacy personal
+data, embedding trojans, building army of botnets, etc. \emph{CRAXDroid} is
+just not one of those solutions. \emph{CRAXDroid} does not intend to discover
+apps that do evil, but to exploit apps that are poorly designed.
+
+We believe that bugs are secret trails that lead to security flaws and enormous
+consequences. A process that crashes may be caused by illegal memory address
+accessing, such as stack overflow and heap overflow. By further manipulating
+the memory content, it is possible to reroute the control flow of the process,
+and let CPU execute any instruction we want. To be more specific, spawning a
+shell, sending out arbitrary files, and anything that does not belong to the
+original purposes of the process.
+
+The above situation is a common practice in x86 desktop and server environments
+for over a decade. In mobile device environment, most research had been done to
+detect malicious apps. The largest Android apps market, Google Play, has its
+own technique, called Google Bouncer\autocite{google2012bouncer}, to prevent
+malware from going public. \emph{CRAXDroid} wants to show that not only
+malicious apps should people worry about, but those with security flaws should.
+\emph{CRAXDroid} uses a special kind of symbolic execution, called single path
+concolic execution, to collect path information, and implements our own
+shellcode generating techniques to construct an exploit that could explode a
+security flaw and take over charge of the app.
+
+The remainder of this thesis is organized as follows: After we go through some
+brief introductions of the background in Chapter 2, we understand how
+\emph{CRAXDroid} uses symbolic execution to generate exploit for Android apps
+in Chapter 3. In Chapter 4, we see how \emph{CRAXDroid} and experiments are
+implemented. In Chapter 5, we proves that \emph{CRAXDroid} does its work by
+showing some exploit results. And in the final chapter, we make a conclusion
+and point out several future work for \emph{CRAXDroid}.
