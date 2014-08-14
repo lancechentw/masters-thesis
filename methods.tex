@@ -5,6 +5,8 @@ Linux/Windows exploit automatically. \emph{CRAXDroid} leverages the power of
 \emph{CRAX} to generate exploit for Android, which is a Linux-based operating
 system. To exploit Android, we start digging from the very outer skin---apps.
 
+\section{Main Idea}
+
 Apps are mostly written in Java and compiled into bytecode. Apps are then run
 by Dalvik VM (Dalvik Virtual Machine), which translate bytecode into machine
 specific language. Since the translation takes time and bytecode is easily
@@ -75,6 +77,8 @@ Figure~\ref{fig:program-counter-contamination}.
   \label{lst:concat-expression}
 \end{listing}
 
+\section{Exploit Scenario 1}
+
 \begin{figure}[!ht]
   \includegraphics[width=\textwidth]{android-exploit-scenario}
   \caption{An Exploit Scenario on Android}
@@ -90,6 +94,8 @@ trigger the vulnerability. \emph{CRAX} installs a sensor at the place where the
 PC register updates value. Once the sensor detects that the value contains
 symbolic expressions instead of constant value, the exploit generating process
 starts.
+
+\section{Exploit Scenario 2}
 
 \begin{figure}[!ht]
   \includegraphics[width=\textwidth]{android-exploit-scenario2}
