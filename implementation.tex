@@ -42,7 +42,8 @@ system that runs on the x86 architecture does, stack overflow, heap overflow,
 format string vulnerability, etc. Any app that leverages the power of native
 library becomes a potential threat. To prove that \emph{CRAXDroid} is able to
 generate exploit automatically on Android x86, a vulnerable app is constructed
-intentionally.
+intentionally as shown in Listing\ref{lst:vulnapp.java} and
+Listing\ref{lst:vulnapp.c}.
 
 The vulnerable app contains a stack overflow vulnerability caused by improper
 use of the function \textbf{strcpy}. \textbf{strcpy} is known to cause
@@ -71,9 +72,16 @@ progress of exploit generating if the examination goes true.
 
 \subsection{Scenario 2 - propagate through Dalvik VM}
 
-\section{ARM}
-\subsection{Raspberry Pi}
-\subsection{Linux ARM}
-\subsection{Android ARM}
+Scenario 2 is implemented slightly different from scenario 1. The source code
+is listed in Listing\ref{lst:vulnapp2.java} and Listing\ref{lst:vulnapp2.c}.
+The input file is opened and read into a buffer in the Dalvik VM and passed to
+the native library through JNI. By successfully generating exploit, we could
+prove that it is possible to exploit a app by giving bad input from the app
+layer.
+
+%\section{ARM}
+%\subsection{Raspberry Pi}
+%\subsection{Linux ARM}
+%\subsection{Android ARM}
 
 % vim: sw=2 sts=2 et
